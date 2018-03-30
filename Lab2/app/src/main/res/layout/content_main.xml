@@ -1,351 +1,436 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</android.support.constraint.ConstraintLayout> -->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.shruthinarayan.lab2.Activities.MainActivity"
+    tools:context="com.example.shruthinarayan.lab2.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbarStyle="insideOverlay">
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView_propertyprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_weight="0"
-
-                    android:paddingRight="3dp"
-                    android:text="Property Price " />
-
-                <EditText
-                    android:id="@+id/editText_propertyprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-
-                    android:inputType="numberDecimal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView_downpayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="0"
-                    android:text="Down Payment" />
-
-                <EditText
-                    android:id="@+id/editText_downpayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView_rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="0"
-                    android:text="Annual Rate(%)" />
-
-                <EditText
-                    android:id="@+id/editText_rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView_terms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="0"
-                    android:paddingRight="50dp"
-                    android:text="Terms : " />
-
-
-                <Spinner
-                    android:id="@+id/spinner_terms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1"
-                    android:entries="@array/terms" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="20" />
-
-                <Button
-                    android:id="@+id/button_calculate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="CALCULATE"
-                    android:textAllCaps="false" />
-
-                <Space
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textview_installment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_weight="0"
-                    android:text="Monthly Payment " />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="20dp"
-                    android:text="$"
-                    android:textSize="35sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textview_answer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:textSize="35sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="0dp"
-                    android:layout_weight="5" />
-
-                <TextView
-                    android:id="@+id/textview_savehome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="0dp"
-                    android:layout_weight="0"
-                    android:text="Save this property?"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="20sp" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/linearlayout_saveform"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="375dp"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintVertical_bias="1.0">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="368dp"
+                    android:layout_height="540dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
                         android:id="@+id/textView_propertytype"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:layout_weight="0"
-                        android:text="Property Type : " />
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="29dp"
+                        android:text="@string/property_type"
+                        app:layout_constraintEnd_toStartOf="@+id/spinner_propertytype"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Spinner
                         android:id="@+id/spinner_propertytype"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="190dp"
+                        android:layout_height="33dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="1"
-                        android:entries="@array/propertytype" />
-                </LinearLayout>
+                        android:layout_marginEnd="86dp"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginTop="34dp"
+                        android:entries="@array/propertytype"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView_propertytype"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/textView_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="104dp"
+                        android:layout_height="24dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="0"
-                        android:text="Street Address : " />
+                        android:layout_marginBottom="64dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="39dp"
+                        android:text="@string/street_address"
+                        app:layout_constraintBottom_toTopOf="@+id/textView_city"
+                        app:layout_constraintEnd_toStartOf="@+id/editText_address"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_propertytype" />
 
                     <EditText
                         android:id="@+id/editText_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="197dp"
+                        android:layout_height="41dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="1"
+                        android:layout_marginBottom="22dp"
+                        android:layout_marginEnd="19dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="18dp"
                         android:ems="10"
-                        android:inputType="textPostalAddress" />
-                </LinearLayout>
+                        android:hint="@string/enter_street_address"
+                        android:inputType="textPostalAddress"
+                        app:layout_constraintBottom_toTopOf="@+id/editText_city"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView_address"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_propertytype" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/textView_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:layout_weight="0"
-                        android:paddingRight="70dp"
-                        android:text="City : " />
+                        android:layout_marginBottom="94dp"
+                        android:layout_marginEnd="47dp"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="42dp"
+                        android:paddingEnd="70dp"
+                        android:paddingStart="0dp"
+                        android:text="@string/city"
+                        app:layout_constraintBottom_toTopOf="@+id/textView_state"
+                        app:layout_constraintEnd_toStartOf="@+id/editText_address"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_address" />
 
                     <EditText
                         android:id="@+id/editText_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="197dp"
+                        android:layout_height="44dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="1"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="20dp"
                         android:ems="10"
-                        android:inputType="textPersonName" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                        android:hint="@string/enter_city_name"
+                        android:inputType="textPersonName"
+                        app:layout_constraintBottom_toTopOf="@+id/spinner_states"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/textView_city"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_address" />
 
                     <TextView
                         android:id="@+id/textView_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:layout_weight="0"
-                        android:paddingRight="50dp"
-                        android:text="State : " />
+                        android:layout_marginBottom="70dp"
+                        android:layout_marginEnd="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="38dp"
+                        android:paddingEnd="50dp"
+                        android:paddingStart="0dp"
+                        android:text="@string/state"
+                        app:layout_constraintBottom_toTopOf="@+id/textView_zipcode"
+                        app:layout_constraintEnd_toStartOf="@+id/spinner_states"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_city" />
 
                     <Spinner
                         android:id="@+id/spinner_states"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="191dp"
+                        android:layout_height="26dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="1"
-                        android:entries="@array/states" />
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="36dp"
+                        android:layout_marginTop="8dp"
+                        android:entries="@array/states"
+                        app:layout_constraintBottom_toTopOf="@+id/editText_zipcode"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView_state"
+                        app:layout_constraintTop_toBottomOf="@+id/editText_city" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/textView_zipcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:layout_weight="0"
-                        android:paddingRight="40dp"
-                        android:text="Zip code : " />
+                        android:layout_marginBottom="234dp"
+                        android:layout_marginEnd="28dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="92dp"
+                        android:paddingEnd="40dp"
+                        android:paddingStart="0dp"
+                        android:text="@string/zip_code"
+                        app:layout_constraintBottom_toTopOf="@+id/button_save"
+                        app:layout_constraintEnd_toStartOf="@+id/editText_zipcode"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_state" />
 
                     <EditText
                         android:id="@+id/editText_zipcode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="196dp"
+                        android:layout_height="37dp"
                         android:layout_margin="20dp"
-                        android:layout_weight="1"
+                        android:layout_marginBottom="151dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="160dp"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                        android:hint="@string/enter_zip_code"
+                        android:inputType="numberDecimal"
+                        app:layout_constraintBottom_toTopOf="@+id/button_save"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView_zipcode"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_states" />
 
                     <Button
                         android:id="@+id/button_save"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:text="Save"
-                        android:textSize="20sp"
+                        android:layout_marginEnd="20dp"
                         android:background="@android:color/holo_blue_dark"
+                        android:text="@string/save"
                         android:textAllCaps="false"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="381dp"
+                android:layout_height="502dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView_propertyprice"
+                    android:layout_width="89dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:padding="0dp"
+                    android:paddingBottom="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingTop="0dp"
+                    android:text="@string/property_price"
+                    android:textColorLink="@android:color/holo_blue_dark"
+                    android:textIsSelectable="false"
+                    app:layout_constraintEnd_toStartOf="@+id/editText_propertyprice"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editText_propertyprice"
+                    android:layout_width="208dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="28dp"
+                    android:ems="10"
+                    android:hint="@string/enter_property_price_in"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintStart_toEndOf="@+id/textView_propertyprice"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/textView_downpayment"
+                    android:layout_width="105dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/down_payment"
+                    app:layout_constraintEnd_toStartOf="@+id/editText_downpayment"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_propertyprice" />
+
+                <EditText
+                    android:id="@+id/editText_downpayment"
+                    android:layout_width="206dp"
+                    android:layout_height="43dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="40dp"
+                    android:ems="10"
+                    android:hint="@string/enter_down_payment_value"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView_downpayment"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_propertyprice" />
+
+                <TextView
+                    android:id="@+id/textView_rate"
+                    android:layout_width="103dp"
+                    android:layout_height="23dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginEnd="19dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/annual_rate"
+                    app:layout_constraintEnd_toStartOf="@+id/editText_rate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editText_rate" />
+
+                <EditText
+                    android:id="@+id/editText_rate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="24dp"
+                    android:ems="10"
+                    android:hint="@string/enter_percentage_rate"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintBottom_toTopOf="@+id/spinner_terms"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/textView_rate"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_downpayment" />
+
+                <TextView
+                    android:id="@+id/textView_terms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="119dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="60dp"
+                    android:paddingEnd="50dp"
+                    android:paddingStart="0dp"
+                    android:text="@string/terms"
+                    app:layout_constraintEnd_toStartOf="@+id/spinner_terms"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_rate" />
+
+
+                <Spinner
+                    android:id="@+id/spinner_terms"
+                    android:layout_width="103dp"
+                    android:layout_height="23dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginEnd="91dp"
+                    android:layout_marginStart="128dp"
+                    android:layout_marginTop="60dp"
+                    android:entries="@array/terms"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.793"
+                    app:layout_constraintStart_toEndOf="@+id/textView_terms"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_rate" />
+
+                <Button
+                    android:id="@+id/button_calculate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="155dp"
+                    android:layout_marginStart="124dp"
+                    android:layout_marginTop="77dp"
+                    android:text="@string/calculate"
+                    android:textAllCaps="false"
+                    android:textColorLink="@android:color/holo_blue_dark"
+                    android:textIsSelectable="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_rate" />
+
+
+                <TextView
+                    android:id="@+id/textview_installment"
+                    android:layout_width="111dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/monthly_payment"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button_calculate" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/dollar"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/textview_answer"
+                    app:layout_constraintStart_toEndOf="@+id/textview_installment"
+                    app:layout_constraintTop_toBottomOf="@+id/button_calculate" />
+
+                <TextView
+                    android:id="@+id/textview_answer"
+                    android:layout_width="109dp"
+                    android:layout_height="64dp"
+                    android:layout_marginEnd="36dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="100dp"
+                    android:ems="10"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView2"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_terms" />
+
+                <TextView
+                    android:id="@+id/textview_savehome"
+                    android:layout_width="193dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="0dp"
+                    android:layout_marginBottom="39dp"
+                    android:layout_marginEnd="101dp"
+                    android:layout_marginStart="206dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/save_this_property"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

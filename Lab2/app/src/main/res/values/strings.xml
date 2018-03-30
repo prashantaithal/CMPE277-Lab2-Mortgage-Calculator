@@ -1,18 +1,44 @@
 <resources>
-    <string name="app_name">Lab 2</string>
+    <string name="app_name">Mortgage Calculator</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="prompt">Choose terms</string>
     <string name="action_reset">Reset</string>
-    <string name="textview_weight">1</string>
-    <string name="edittext_weight">1</string>
-    <string name="spinner_weight">1</string>
+    <string name="textview_weight">2</string>
+    <string name="edittext_weight">2</string>
+    <string name="spinner_weight">2</string>
+    <string name="state">State :</string>
+    <string name="city">City :</string>
+    <string name="zip_code">Zip code :</string>
+    <string name="save">Save</string>
+    <string name="calculate">CALCULATE</string>
+    <string name="property_price">Property Price</string>
+    <string name="street_address">Street Address :</string>
+    <string name="property_type">Property Type :</string>
+    <string name="save_this_property">Save this property?</string>
+    <string name="dollar">$</string>
+    <string name="down_payment">Down Payment</string>
+    <string name="monthly_payment">Monthly Payment</string>
+    <string name="terms">Terms :</string>
+    <string name="annual_rate">Annual Rate(%)</string>
+    <string name="enter_property_price_in">Enter property price in $</string>
+    <string name="enter_down_payment_value">Enter down payment in $</string>
+    <string name="enter_percentage_rate">Enter percentage rate</string>
+    <string name="enter_zip_code">Enter ZIP code</string>
+    <string name="enter_city_name">Enter city name</string>
+    <string name="enter_street_address">Enter street address</string>
+    <string name="mortgage_str">Calculate Mortgage</string>
+    <string name="map_str">Show Homes in Map</string>
+    <string name="menu">MENU</string>
+    <string name="todo">TODO</string>
 
-    <string-array name="terms">
+    <string-array
+        name="terms">
         <item>15</item>
         <item>30</item>
     </string-array>
-    <string-array name="propertytype">
+    <string-array
+        name="propertytype">
         <item>House</item>
         <item>TownHouse</item>
         <item>Condo</item>

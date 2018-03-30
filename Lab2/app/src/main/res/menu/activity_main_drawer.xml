@@ -3,11 +3,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/calculate_mortgage"
-            android:icon="@drawable/ic_menu_calculatemortgage"
-            android:title="Calculate Mortgage" />
+            android:icon="@drawable/ic_dollar"
+            android:title="@string/mortgage_str" />
         <item
             android:id="@+id/showhomes_inmap"
-            android:icon="@drawable/ic_showinmap"
-            android:title="Show Homes in Map" />
+            android:icon="@drawable/ic_map"
+            android:title="@string/map_str" />
     </group>
 </menu>

@@ -1,4 +1,4 @@
-package com.example.shruthinarayan.lab2.Activities;
+package com.example.shruthinarayan.lab2.activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shruthinarayan.lab2.Databases.HomeDatabase;
 import com.example.shruthinarayan.lab2.Databases.HomeDatabaseHelper;
 import com.example.shruthinarayan.lab2.Datafields;
 import com.example.shruthinarayan.lab2.R;

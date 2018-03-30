@@ -1,15 +1,14 @@
-package com.example.shruthinarayan.lab2.Activities;
+package com.example.shruthinarayan.lab2.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +21,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Spinner mTerms;
     private Button mCalculate;
     private TextView mAnswer;
-    private LinearLayout mSaveForm;
+    private ConstraintLayout mSaveForm;
     private TextView mSaveHome;
     private Button mSave;
     private Spinner mType;
@@ -194,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        mSaveForm = (LinearLayout) findViewById(R.id.linearlayout_saveform);
+        mSaveForm =  findViewById(R.id.linearlayout_saveform);
         mSaveHome = (TextView) findViewById(R.id.textview_savehome);
         mCalculate.setOnClickListener(listener);
 
