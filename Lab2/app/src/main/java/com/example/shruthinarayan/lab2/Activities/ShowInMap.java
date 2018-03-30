@@ -21,9 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shruthinarayan.lab2.Databases.HomeDatabase;
 import com.example.shruthinarayan.lab2.Databases.HomeDatabaseHelper;
-import com.example.shruthinarayan.lab2.Datafields;
+import com.example.shruthinarayan.lab2.Data;
 import com.example.shruthinarayan.lab2.R;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,15 +45,16 @@ import java.util.List;
 
 public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener
 {
-    private ArrayList<Datafields> homelist = new ArrayList<Datafields>();
+    private ArrayList<Data> homelist = new ArrayList<Data>();
     private MenuItem reset_action;
     private List<Address> temp = null;
-    private HashMap<Marker,Datafields> infowindows = new HashMap<Marker, Datafields>();
+    private HashMap<Marker,Data> infowindows = new HashMap<Marker, Data>();
     private Address location = null;
     private LatLng p1 = null;
 
     private TextView type;
-    private TextView address;
+    private TextView street_address;
+    private TextView city;
     private TextView price;
     private TextView downpayment;
     private TextView rate;
@@ -71,7 +71,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
         setSupportActionBar(toolbar);
 
 
-        // Navigation Drawer Code ...
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -86,11 +86,11 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //Geocoder for validating address ...
+
 
         Geocoder geoCoder = new Geocoder(getApplicationContext());
 
-        // Getting Readable Database ...
+
 
         HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
 
@@ -105,7 +105,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
         Geocoder geoCoder = new Geocoder(getApplicationContext());
         if(homelist.size() == 0)
         {
-            // If not found than displaying US ...
+
             Geocoder america = new Geocoder(getApplicationContext());
             try {
                 temp = america.getFromLocationName("California, United States of America", 1);
@@ -129,7 +129,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                 Marker marker;
                 System.out.println("Inside for loop");
                 try {
-                    Datafields home = homelist.get(i);
+                    Data home = homelist.get(i);
                     // Displaying Homes as Markers ...
                     String full_address = home.getFullAddress();
                     System.out.println("Address : " + full_address);
@@ -154,23 +154,24 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
             map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
-                // Use default InfoWindow frame
+
                 @Override
                 public View getInfoWindow(Marker marker) {
                     return null;
                 }
 
-                // Defines the contents of the InfoWindow
+
                 @Override
                 public View getInfoContents(final Marker marker) {
 
-                    Datafields home;
+                    Data home;
                     final Dialog dialog = new Dialog(ShowInMap.this);
                     dialog.setContentView(R.layout.infowindow);
                     dialog.setTitle("Home");
 
                     type = (TextView) dialog.findViewById(R.id.type);
-                    address = (TextView) dialog.findViewById(R.id.address);
+                    street_address = (TextView) dialog.findViewById(R.id.address);
+                    city = (TextView) dialog.findViewById(R.id.city);
                     price = (TextView) dialog.findViewById(R.id.price);
                     downpayment = (TextView) dialog.findViewById(R.id.downpayment);
                     rate = (TextView) dialog.findViewById(R.id.rate);
@@ -181,7 +182,8 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
                     home = infowindows.get(marker);
                     type.setText(home.getType());
-                    address.setText(home.getFullAddress());
+                    street_address.setText(home.getAddress());
+                    city.setText(home.getCity());
                     price.setText(home.getPropertyprice());
                     downpayment.setText(home.getDownpayment());
                     rate.setText(home.getRate());
@@ -192,7 +194,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                         @Override
                         public void onClick(View v) {
                             HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
-                            Datafields homeToEdit = infowindows.get(marker);
+                            Data homeToEdit = infowindows.get(marker);
                             Gson gson = new Gson();
                             String j = gson.toJson(homeToEdit);
                             Intent intent = new Intent(ShowInMap.this, MainActivity.class);
@@ -206,7 +208,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                         @Override
                         public void onClick(View v) {
                             HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
-                            Datafields homeToRemove = infowindows.get(marker);
+                            Data homeToRemove = infowindows.get(marker);
                             mDbHelper.deleteHome(homeToRemove.getAddress());
                             marker.remove();
                             dialog.dismiss();
@@ -219,9 +221,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                         }
                     });
                     dialog.show();
-                    // Getting view from the layout file info_window_layout
 
-                    // Returning the view containing InfoWindow contents
                     return null;
                 }
             });
@@ -242,7 +242,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.main, menu);
         reset_action = menu.findItem(R.id.action_reset);
         reset_action.setTitle("Clear All Saved Homes");
@@ -251,12 +251,10 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_reset) {
 
             HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
@@ -281,7 +279,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         // Handle the camera action
