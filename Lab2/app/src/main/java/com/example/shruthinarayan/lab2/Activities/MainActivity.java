@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mAnswer.setText("");
             mSaveForm.setVisibility(View.INVISIBLE);
         } else if (id == R.id.showhomes_inmap) {
-            startActivity(new Intent(MainActivity.this, com.example.shruthinarayan.lab2.Activities.ShowInMap.class));
+            startActivity(new Intent(MainActivity.this, com.example.shruthinarayan.lab2.activities.ShowInMap.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
