@@ -18,15 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shruthinarayan.lab2.Databases.HomeDatabaseHelper;
 import com.example.shruthinarayan.lab2.Data;
 import com.example.shruthinarayan.lab2.R;
 import com.google.gson.Gson;
@@ -36,16 +35,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private MenuItem reset_action;
     private EditText mDownPayment;
     private EditText mPropertyAmount;
     private EditText mRate;
     private Spinner mTerms;
-    private Button mCalculate;
     private TextView mAnswer;
     private ConstraintLayout mSaveForm;
-    private TextView mSaveHome;
-    private Button mSave;
     private Spinner mType;
     private EditText mAddress;
     private EditText mCity;
@@ -58,31 +53,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Button mCalculate;
+        Button mSave;
+        TextView mSaveHome;
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mScrollView = (ScrollView) findViewById(R.id.scrollview);
-        mType = (Spinner) findViewById(R.id.spinner_propertytype);
-        mAddress = (EditText) findViewById(R.id.editText_address);
-        mCity = (EditText) findViewById(R.id.editText_city);
-        mState = (Spinner) findViewById(R.id.spinner_states);
-        mZip = (EditText) findViewById(R.id.editText_zipcode);
-        mPropertyAmount = (EditText) findViewById(R.id.editText_propertyprice);
-        mDownPayment = (EditText) findViewById(R.id.editText_downpayment);
-        mRate = (EditText) findViewById(R.id.editText_rate);
-        mTerms = (Spinner) findViewById(R.id.spinner_terms);
-        mAnswer = (TextView) findViewById(R.id.textview_answer);
-        mCalculate = (Button) findViewById(R.id.button_calculate);
-        mSave = (Button) findViewById(R.id.button_save);
+        mScrollView = findViewById(R.id.scrollview);
+        mType = findViewById(R.id.spinner_propertytype);
+        mAddress = findViewById(R.id.editText_address);
+        mCity = findViewById(R.id.editText_city);
+        mState = findViewById(R.id.spinner_states);
+        mZip = findViewById(R.id.editText_zipcode);
+        mPropertyAmount = findViewById(R.id.editText_propertyprice);
+        mDownPayment = findViewById(R.id.editText_downpayment);
+        mRate = findViewById(R.id.editText_rate);
+        mTerms = findViewById(R.id.spinner_terms);
+        mAnswer = findViewById(R.id.textview_answer);
+        mCalculate = findViewById(R.id.button_calculate);
+        mSave = findViewById(R.id.button_save);
 
         if (getIntent().getStringExtra("home") != null) {
             String jsonString = getIntent().getStringExtra("home");
@@ -137,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 float rate;
                 int terms;
 
-                if (propertyprice.isEmpty() || propertyprice == "") {
+                if (propertyprice.isEmpty() || propertyprice.equalsIgnoreCase("")) {
                     Context context = getApplicationContext();
                     CharSequence text = "Property Price can't be empty";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                } else if (r.isEmpty() || r == "") {
+                } else if (r.isEmpty() || r.equalsIgnoreCase("")) {
                     Context context = getApplicationContext();
                     CharSequence text = "Rate cannot be empty";
                     int duration = Toast.LENGTH_SHORT;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     property_price = Float.parseFloat(propertyprice);
 
-                    if (d.isEmpty() || d == "") {
+                    if (d.isEmpty() || d.equalsIgnoreCase("")) {
                         downPayment = 0;
                         mDownPayment.setText(downPayment + "");
                     } else
@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        mSaveForm =  findViewById(R.id.linearlayout_saveform);
-        mSaveHome = (TextView) findViewById(R.id.textview_savehome);
+        mSaveForm = findViewById(R.id.linearlayout_saveform);
+        mSaveHome = findViewById(R.id.textview_savehome);
         mCalculate.setOnClickListener(listener);
 
         View.OnClickListener listener1 = new View.OnClickListener() {
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fields[8] = mTerms.getSelectedItem().toString();
                 fields[9] = mAnswer.getText().toString();
 
-                if (fields[1].isEmpty() || fields[1] == "" || fields[2].isEmpty() || fields[2] == "" || fields[4].isEmpty() || fields[4] == "") {
+                if (fields[1].isEmpty() || fields[1].equals("") || fields[2].isEmpty() || fields[2].equals("") || fields[4].isEmpty() || fields[4].equals( "")) {
                     Context context = getApplicationContext();
                     CharSequence text = "Address fields cannot be empty";
                     int duration = Toast.LENGTH_SHORT;
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Geocoder address_checker = new Geocoder(getApplicationContext());
                         try {
                             temp = address_checker.getFromLocationName(full_address, 1);
-                            if (temp == null || temp.isEmpty() || data.getFullAddress() == "") {
+                            if (temp == null || temp.isEmpty() || data.getFullAddress().equalsIgnoreCase("")) {
                                 Context context = getApplicationContext();
                                 CharSequence text = "Couldn't verify address.! Please correct Error in Address";
                                 int duration = Toast.LENGTH_SHORT;
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                             else {
                                 location = temp.get(0);
-                                HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
+                                com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
 
                                 try {
                                     if (getIntent().getStringExtra("home") != null) {
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem reset_action;
         getMenuInflater().inflate(R.menu.main, menu);
         reset_action = menu.findItem(R.id.action_reset);
         reset_action.setTitle("Start New Calculation");
@@ -354,9 +355,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mAnswer.setText("");
             mSaveForm.setVisibility(View.INVISIBLE);
         } else if (id == R.id.showhomes_inmap) {
-            startActivity(new Intent(MainActivity.this, com.example.shruthinarayan.lab2.activities.ShowInMap.class));
+            startActivity(new Intent(MainActivity.this, MapActivity.class));
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

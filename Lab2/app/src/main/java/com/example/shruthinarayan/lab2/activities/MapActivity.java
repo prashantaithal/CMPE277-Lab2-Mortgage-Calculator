@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shruthinarayan.lab2.Databases.HomeDatabaseHelper;
 import com.example.shruthinarayan.lab2.Data;
 import com.example.shruthinarayan.lab2.R;
 
@@ -43,7 +42,7 @@ import java.util.List;
  * Created by shruthinarayan on 3/27/18.
  */
 
-public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener
 {
     private ArrayList<Data> homelist = new ArrayList<Data>();
     private MenuItem reset_action;
@@ -66,20 +65,20 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_showinmap);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_map);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
@@ -87,12 +86,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
         mapFragment.getMapAsync(this);
 
 
-
-        Geocoder geoCoder = new Geocoder(getApplicationContext());
-
-
-
-        HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
+        com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
 
         homelist = mDbHelper.retrieveHomes();
         // Creating a cursor and reading all the rows from Database ...
@@ -165,20 +159,20 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                 public View getInfoContents(final Marker marker) {
 
                     Data home;
-                    final Dialog dialog = new Dialog(ShowInMap.this);
+                    final Dialog dialog = new Dialog(MapActivity.this);
                     dialog.setContentView(R.layout.infowindow);
                     dialog.setTitle("Home");
 
-                    type = (TextView) dialog.findViewById(R.id.type);
-                    street_address = (TextView) dialog.findViewById(R.id.address);
-                    city = (TextView) dialog.findViewById(R.id.city);
-                    price = (TextView) dialog.findViewById(R.id.price);
-                    downpayment = (TextView) dialog.findViewById(R.id.downpayment);
-                    rate = (TextView) dialog.findViewById(R.id.rate);
-                    terms = (TextView) dialog.findViewById(R.id.terms);
-                    installment = (TextView) dialog.findViewById(R.id.installment);
-                    edit = (Button) dialog.findViewById(R.id.edit);
-                    delete = (Button) dialog.findViewById(R.id.delete);
+                    type = dialog.findViewById(R.id.type);
+                    street_address = dialog.findViewById(R.id.address);
+                    city = dialog.findViewById(R.id.city);
+                    price = dialog.findViewById(R.id.price);
+                    downpayment = dialog.findViewById(R.id.downpayment);
+                    rate = dialog.findViewById(R.id.rate);
+                    terms = dialog.findViewById(R.id.terms);
+                    installment = dialog.findViewById(R.id.installment);
+                    edit = dialog.findViewById(R.id.edit);
+                    delete = dialog.findViewById(R.id.delete);
 
                     home = infowindows.get(marker);
                     type.setText(home.getType());
@@ -193,11 +187,11 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
+                       //     com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
                             Data homeToEdit = infowindows.get(marker);
                             Gson gson = new Gson();
                             String j = gson.toJson(homeToEdit);
-                            Intent intent = new Intent(ShowInMap.this, MainActivity.class);
+                            Intent intent = new Intent(MapActivity.this, MainActivity.class);
                             intent.putExtra("home",j);
                             startActivity(intent);
 
@@ -207,7 +201,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
+                            com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
                             Data homeToRemove = infowindows.get(marker);
                             mDbHelper.deleteHome(homeToRemove.getAddress());
                             marker.remove();
@@ -227,12 +221,12 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
             });
 
         }
-    };
+    }
 
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -257,7 +251,7 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
         if (id == R.id.action_reset) {
 
-            HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
+            com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
             mDbHelper.truncateTable(db);
@@ -284,11 +278,12 @@ public class ShowInMap extends AppCompatActivity implements OnMapReadyCallback,N
 
         // Handle the camera action
         if (id == R.id.calculate_mortgage) {
-            startActivity(new Intent(ShowInMap.this,MainActivity.class));
-        } else if (id == R.id.showhomes_inmap) {
-
+            startActivity(new Intent(MapActivity.this,MainActivity.class));
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        else if (id == R.id.showhomes_inmap) {
+//
+//        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

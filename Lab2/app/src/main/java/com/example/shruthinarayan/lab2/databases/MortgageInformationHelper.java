@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * Created by shruthinarayan on 3/27/18.
  */
 
-public class HomeDatabaseHelper extends SQLiteOpenHelper {
+public class MortgageInformationHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "HomeDatabase.db";
+    public static final String DATABASE_NAME = "MortgageInformation.db";
 
-    public HomeDatabaseHelper(Context context) {
+    public MortgageInformationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
