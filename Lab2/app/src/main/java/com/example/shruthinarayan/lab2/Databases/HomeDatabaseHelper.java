@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.shruthinarayan.lab2.Databases.*;
-import com.example.shruthinarayan.lab2.Datafields;
+import com.example.shruthinarayan.lab2.Data;
 
 import java.util.ArrayList;
 
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 
 public class HomeDatabaseHelper extends SQLiteOpenHelper {
 
-
-    // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "HomeDatabase.db";
 
@@ -30,8 +27,7 @@ public class HomeDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(HomeDatabase.SQL_CREATE_ENTRIES);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
+
         db.execSQL(HomeDatabase.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
@@ -44,31 +40,31 @@ public class HomeDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(HomeDatabase.SQL_DELETE_ENTRIES);
     }
 
-    public void insertHome(Datafields datafields) throws Exception {
+    public void insertHome(Data data) throws Exception {
 
         SQLiteDatabase db = this.getWritableDatabase();
         this.onCreate(db);
 
         ContentValues values = new ContentValues();
-        values.put(HomeDatabase.COLUMN1_NAME_TITLE, datafields.getType());
-        values.put(HomeDatabase.COLUMN2_NAME_TITLE, datafields.getAddress());
-        values.put(HomeDatabase.COLUMN3_NAME_TITLE, datafields.getCity());
-        values.put(HomeDatabase.COLUMN4_NAME_TITLE, datafields.getState());
-        values.put(HomeDatabase.COLUMN5_NAME_TITLE, datafields.getZip());
-        values.put(HomeDatabase.COLUMN6_NAME_TITLE, datafields.getPropertyprice());
-        values.put(HomeDatabase.COLUMN7_NAME_TITLE, datafields.getDownpayment());
-        values.put(HomeDatabase.COLUMN8_NAME_TITLE, datafields.getRate());
-        values.put(HomeDatabase.COLUMN9_NAME_TITLE, datafields.getTerms());
-        values.put(HomeDatabase.COLUMN10_NAME_TITLE, datafields.getMonthlyPayments());
+        values.put(HomeDatabase.COLUMN1_NAME_TITLE, data.getType());
+        values.put(HomeDatabase.COLUMN2_NAME_TITLE, data.getAddress());
+        values.put(HomeDatabase.COLUMN3_NAME_TITLE, data.getCity());
+        values.put(HomeDatabase.COLUMN4_NAME_TITLE, data.getState());
+        values.put(HomeDatabase.COLUMN5_NAME_TITLE, data.getZip());
+        values.put(HomeDatabase.COLUMN6_NAME_TITLE, data.getPropertyprice());
+        values.put(HomeDatabase.COLUMN7_NAME_TITLE, data.getDownpayment());
+        values.put(HomeDatabase.COLUMN8_NAME_TITLE, data.getRate());
+        values.put(HomeDatabase.COLUMN9_NAME_TITLE, data.getTerms());
+        values.put(HomeDatabase.COLUMN10_NAME_TITLE, data.getMonthlyPayments());
 
         long newRowId = db.insert(HomeDatabase.TABLE_NAME, null, values);
 
         db.close();
     }
 
-    public ArrayList<Datafields> retrieveHomes(){
+    public ArrayList<Data> retrieveHomes(){
 
-        ArrayList<Datafields> homelist = new ArrayList<Datafields>();
+        ArrayList<Data> homelist = new ArrayList<Data>();
         String temp[] = new String[10];
         SQLiteDatabase db = this.getReadableDatabase();
         this.onCreate(db);
@@ -80,7 +76,7 @@ public class HomeDatabaseHelper extends SQLiteOpenHelper {
                 do {
 
 
-                    Datafields home = new Datafields();
+                    Data home = new Data();
                     // Assigning row fields to variables ...
                     temp[0] = c.getString(1);
                     temp[1] = c.getString(2);

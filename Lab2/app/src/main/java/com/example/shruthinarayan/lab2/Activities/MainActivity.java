@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shruthinarayan.lab2.Databases.HomeDatabaseHelper;
-import com.example.shruthinarayan.lab2.Datafields;
+import com.example.shruthinarayan.lab2.Data;
 import com.example.shruthinarayan.lab2.R;
 import com.google.gson.Gson;
 
@@ -35,8 +35,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    // Member variables from Layout
 
     private MenuItem reset_action;
     private EditText mDownPayment;
@@ -53,16 +51,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText mCity;
     private EditText mZip;
     private Spinner mState;
-    private Datafields datafields;
+    private Data data;
     private ScrollView mScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //Navigation Drawer code ...
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,74 +70,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Initializing all the member variables ...
-
         mScrollView = (ScrollView) findViewById(R.id.scrollview);
         mType = (Spinner) findViewById(R.id.spinner_propertytype);
         mAddress = (EditText) findViewById(R.id.editText_address);
         mCity = (EditText) findViewById(R.id.editText_city);
         mState = (Spinner) findViewById(R.id.spinner_states);
         mZip = (EditText) findViewById(R.id.editText_zipcode);
-
         mPropertyAmount = (EditText) findViewById(R.id.editText_propertyprice);
         mDownPayment = (EditText) findViewById(R.id.editText_downpayment);
         mRate = (EditText) findViewById(R.id.editText_rate);
         mTerms = (Spinner) findViewById(R.id.spinner_terms);
-
         mAnswer = (TextView) findViewById(R.id.textview_answer);
-
         mCalculate = (Button) findViewById(R.id.button_calculate);
         mSave = (Button) findViewById(R.id.button_save);
 
-        if(getIntent().getStringExtra("home") != null) {
+        if (getIntent().getStringExtra("home") != null) {
             String jsonString = getIntent().getStringExtra("home");
             Gson gson = new Gson();
-            Datafields home = gson.fromJson(jsonString, Datafields.class);
+            Data home = gson.fromJson(jsonString, Data.class);
 
             int position = 0;
-            String[] temp_type =  getResources().getStringArray(R.array.propertytype);
-            for(int i=0; i < temp_type.length; i++)
-                if(temp_type[i].equals(home.getState()))
+            String[] temp_type = getResources().getStringArray(R.array.propertytype);
+            for (int i = 0; i < temp_type.length; i++)
+                if (temp_type[i].equals(home.getState()))
                     position = i;
 
             mType.setSelection(position);
-
             mAddress.setText(home.getAddress());
             mCity.setText(home.getCity());
 
             position = 0;
-            String[] temp_states =  getResources().getStringArray(R.array.states);
-            for(int i=0; i < temp_states.length; i++)
-                if(temp_states[i].equals(home.getState()))
+            String[] temp_states = getResources().getStringArray(R.array.states);
+            for (int i = 0; i < temp_states.length; i++)
+                if (temp_states[i].equals(home.getState()))
                     position = i;
 
             mState.setSelection(position);
-
             mZip.setText(home.getZip());
             mPropertyAmount.setText(home.getPropertyprice());
             mDownPayment.setText(home.getDownpayment());
             mRate.setText(home.getRate());
 
             position = 0;
-            String[] temp_terms =  getResources().getStringArray(R.array.terms);
-            for(int i=0; i < temp_terms.length; i++)
-                if(temp_terms[i].equals(home.getTerms()))
+            String[] temp_terms = getResources().getStringArray(R.array.terms);
+            for (int i = 0; i < temp_terms.length; i++)
+                if (temp_terms[i].equals(home.getTerms()))
                     position = i;
 
             mTerms.setSelection(position);
-
             mAnswer.setText(home.getMonthlyPayments());
 
         }
 
-        datafields = new Datafields();
-        // Listener for Mortgage Calculation ...
+        data = new Data();
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Variable declaration...
                 String propertyprice = mPropertyAmount.getText().toString();
                 String d = mDownPayment.getText().toString();
                 String r = mRate.getText().toString();
@@ -151,42 +137,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 float rate;
                 int terms;
 
-
-                //validation of Input...
-                if(propertyprice.isEmpty() || propertyprice == "")
-                {
+                if (propertyprice.isEmpty() || propertyprice == "") {
                     Context context = getApplicationContext();
                     CharSequence text = "Property Price can't be empty";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else
-                {   property_price = Float.parseFloat(propertyprice);
+                } else if (r.isEmpty() || r == "") {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Rate cannot be empty";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } else {
+                    property_price = Float.parseFloat(propertyprice);
 
-                    if(d.isEmpty() || d=="")
+                    if (d.isEmpty() || d == "") {
                         downPayment = 0;
-                    else
+                        mDownPayment.setText(downPayment + "");
+                    } else
                         downPayment = Float.parseFloat(mDownPayment.getText().toString());
-                    if(r.isEmpty() || r=="")
-                    {
-                        rate = 0;
-                        Context context = getApplicationContext();
-                        CharSequence text = "Rate ZERO ? Great..!";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }
-                    else
-                        rate = Float.parseFloat(r);
 
-                    // Mortgage Calculation
+                    rate = Float.parseFloat(r);
 
                     terms = Integer.parseInt(t);
                     float principal = property_price - downPayment;
                     rate = rate / 1200;
                     terms = terms * 12;
-                    int installment = (int) ((rate * principal) / (1 - Math.pow(1 + rate, terms * -1)));
+                    int installment = (int) (((rate * principal) / (1 - Math.pow(1 + rate, terms * -1))));
                     mAnswer.setText(installment + "");
                 }
             }
@@ -196,24 +174,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSaveHome = (TextView) findViewById(R.id.textview_savehome);
         mCalculate.setOnClickListener(listener);
 
-        // Listener for Saving Home form ...
-
         View.OnClickListener listener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSaveForm.setVisibility(View.VISIBLE);
-                mScrollView.scrollBy(0,1000);
+                mScrollView.scrollBy(0, 1000);
             }
         };
         mSaveHome.setOnClickListener(listener1);
 
-        // Listener for Saving Entries in Database ...
-
         View.OnClickListener listener2 = new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                // Initializing fields ...
                 String[] fields = new String[10];
                 fields[0] = mType.getSelectedItem().toString();
                 fields[1] = mAddress.getText().toString();
@@ -226,88 +200,87 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fields[8] = mTerms.getSelectedItem().toString();
                 fields[9] = mAnswer.getText().toString();
 
+                if (fields[1].isEmpty() || fields[1] == "" || fields[2].isEmpty() || fields[2] == "" || fields[4].isEmpty() || fields[4] == "") {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Address fields cannot be empty";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } else {
+                    data.setFields(fields);
 
-                datafields.setFields(fields);
+                    String full_address = data.getFullAddress();
 
-                String full_address = datafields.getFullAddress();
+                    List<Address> temp = null;
+                    Address location = null;
 
+                    ConnectivityManager connectivityManager
+                            = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                    if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                        Geocoder address_checker = new Geocoder(getApplicationContext());
+                        try {
+                            temp = address_checker.getFromLocationName(full_address, 1);
+                            if (temp == null || temp.isEmpty() || data.getFullAddress() == "") {
+                                Context context = getApplicationContext();
+                                CharSequence text = "Couldn't verify address.! Please correct Error in Address";
+                                int duration = Toast.LENGTH_SHORT;
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
+                            else {
+                                location = temp.get(0);
+                                HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
 
-                // Verifying address ...
+                                try {
+                                    if (getIntent().getStringExtra("home") != null) {
 
-                List<Address> temp = null;
-                Address location = null;
+                                        fields[0] = mType.getSelectedItem().toString();
+                                        fields[1] = mAddress.getText().toString();
+                                        fields[2] = mCity.getText().toString();
+                                        fields[3] = mState.getSelectedItem().toString();
+                                        fields[4] = mZip.getText().toString();
+                                        fields[5] = mPropertyAmount.getText().toString();
+                                        fields[6] = mDownPayment.getText().toString();
+                                        fields[7] = mRate.getText().toString();
+                                        fields[8] = mTerms.getSelectedItem().toString();
+                                        fields[9] = mAnswer.getText().toString();
 
-                ConnectivityManager connectivityManager
-                        = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                    Geocoder address_checker = new Geocoder(getApplicationContext());
-                    try {
-                        temp = address_checker.getFromLocationName(full_address, 1);
-                        if (temp == null || temp.isEmpty() || datafields.getFullAddress() == "") {
+                                        mDbHelper.updateHome(fields, fields[1]);
+                                        Context context = getApplicationContext();
+                                        CharSequence text = "Address Updated Successfully.";
+                                        int duration = Toast.LENGTH_SHORT;
+                                        Toast toast = Toast.makeText(context, text, duration);
+                                        toast.show();
+                                    } else {
+                                        mDbHelper.insertHome(data);
+                                        Context context = getApplicationContext();
+                                        CharSequence text = "Address Successfully Saved.";
+                                        int duration = Toast.LENGTH_SHORT;
+                                        Toast toast = Toast.makeText(context, text, duration);
+                                        toast.show();
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("Exception ", "e");
+                                    System.out.println("Exception " + e);
+                                }
+                            }
+                        } catch (IOException ioe) {
                             Context context = getApplicationContext();
-                            CharSequence text = "Couldn't verify address.! Please correct Error in Address";
+                            CharSequence text = "Couldn't verify address.! Please correct Error";
                             int duration = Toast.LENGTH_SHORT;
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
-                        } else {
-                            location = temp.get(0);
-                            HomeDatabaseHelper mDbHelper = new HomeDatabaseHelper(getApplicationContext());
-
-                            // Mapping columns to fields ...
-
-                            try {
-                                if(getIntent().getStringExtra("home") != null) {
-
-                                    fields[0] = mType.getSelectedItem().toString();
-                                    fields[1] = mAddress.getText().toString();
-                                    fields[2] = mCity.getText().toString();
-                                    fields[3] = mState.getSelectedItem().toString();
-                                    fields[4] = mZip.getText().toString();
-                                    fields[5] = mPropertyAmount.getText().toString();
-                                    fields[6] = mDownPayment.getText().toString();
-                                    fields[7] = mRate.getText().toString();
-                                    fields[8] = mTerms.getSelectedItem().toString();
-                                    fields[9] = mAnswer.getText().toString();
-
-                                    mDbHelper.updateHome(fields,fields[1]);
-                                    Context context = getApplicationContext();
-                                    CharSequence text = "Address Updated Successfully.";
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-                                }
-                                else {
-                                    mDbHelper.insertHome(datafields);
-                                    Context context = getApplicationContext();
-                                    CharSequence text = "Address Successfully Saved.";
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-                                }
-                            }catch (Exception e)
-                            {
-                                Log.e("Exception ","e");
-                                System.out.println("Exception " + e);
-                            }
                         }
-                    } catch (IOException ioe) {
+                    } else {
                         Context context = getApplicationContext();
-                        CharSequence text = "Couldn't verify address.! Please correct Error";
+                        CharSequence text = "Couldn't verify Address.! Please connect to Internet";
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
                     }
-                }
-                else
-                {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Couldn't verify Address.! Please connect to Internet";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
 
+                }
             }
         };
         mSave.setOnClickListener(listener2);
@@ -316,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 mSaveForm.setVisibility(View.VISIBLE);
-                mScrollView.scrollBy(0,1000);
+                mScrollView.scrollBy(0, 1000);
             }
         };
         mSaveHome.setOnClickListener(listener3);
@@ -334,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         reset_action = menu.findItem(R.id.action_reset);
         reset_action.setTitle("Start New Calculation");
@@ -343,12 +315,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset) {
 
             mType.setSelection(0);
@@ -361,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mRate.setText("");
             mTerms.setSelection(0);
             mAnswer.setText("");
+            mSaveForm.setVisibility(View.INVISIBLE);
 
         }
 
@@ -370,13 +339,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.calculate_mortgage) {
-
+            mType.setSelection(0);
+            mAddress.setText("");
+            mCity.setText("");
+            mState.setSelection(0);
+            mZip.setText("");
+            mPropertyAmount.setText("");
+            mDownPayment.setText("");
+            mRate.setText("");
+            mTerms.setSelection(0);
+            mAnswer.setText("");
+            mSaveForm.setVisibility(View.INVISIBLE);
         } else if (id == R.id.showhomes_inmap) {
-            startActivity(new Intent(MainActivity.this, ShowInMap.class));
+            startActivity(new Intent(MainActivity.this, com.example.shruthinarayan.lab2.Activities.ShowInMap.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

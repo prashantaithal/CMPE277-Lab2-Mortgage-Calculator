@@ -6,8 +6,6 @@ package com.example.shruthinarayan.lab2.Databases;
 
 public final class HomeDatabase {
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // make the constructor private.
     private HomeDatabase() {}
 
     /* Inner class that defines the table contents */
