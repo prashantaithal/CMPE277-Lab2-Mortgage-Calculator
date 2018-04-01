@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,14 +49,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private HashMap<Marker, Data> popUpInfo = new HashMap<Marker, Data>();
     private ArrayList<Data> homeList = new ArrayList<Data>();
 
-    private TextView typeText;
-    private TextView streetAddress;
-    private TextView cityText;
-    private TextView priceText;
-    private TextView rateText;
-    private TextView termsText;
-    private TextView installmentText;
-    private TextView downpaymentText;
+
 
     private Button deleteBtn;
     private Button edit;
@@ -153,6 +147,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         dialog.setContentView(R.layout.details);
         dialog.setTitle("Home");
 
+        TextView typeText;
+        TextView streetAddress;
+        TextView cityText;
+        TextView priceText;
+        TextView rateText;
+        TextView termsText;
+        TextView installmentText;
+        TextView downpaymentText;
+        TextView loanText;
+
         typeText = dialog.findViewById(R.id.type);
         streetAddress = dialog.findViewById(R.id.address);
         cityText = dialog.findViewById(R.id.city);
@@ -162,6 +166,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         termsText = dialog.findViewById(R.id.terms);
         installmentText = dialog.findViewById(R.id.installment);
         edit = dialog.findViewById(R.id.edit);
+        loanText = dialog.findViewById(R.id.loan_amt);
         deleteBtn = dialog.findViewById(R.id.delete);
 
         home = popUpInfo.get(marker);
@@ -173,6 +178,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         downpaymentText.setText(home.getDownpayment());
         termsText.setText(home.getTerms());
         installmentText.setText(home.getEMI());
+
+        float propPrice = Float.parseFloat(home.getPropertyprice());
+        float downPayment = Float.parseFloat(home.getDownpayment());
+        float loanVal = propPrice - downPayment;
+        loanText.setText(Float.toString(loanVal));
+
         return dialog;
     }
 

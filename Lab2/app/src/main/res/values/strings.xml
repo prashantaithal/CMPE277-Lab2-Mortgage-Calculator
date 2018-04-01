@@ -31,6 +31,17 @@
     <string name="map_str">Show Homes in Map</string>
     <string name="menu">MENU</string>
     <string name="todo">TODO</string>
+    <string name="city_info">City :</string>
+    <string name="street_address_info">Street Address :</string>
+    <string name="home_type_info">Home Type :</string>
+    <string name="home_price_info">Home Price :</string>
+    <string name="down_payment_info">Down Payment :</string>
+    <string name="annual_rate_info">Annual Rate (in %) :</string>
+    <string name="terms_info">Terms :</string>
+    <string name="monthly_payment_info">Monthly Payment :</string>
+    <string name="loan_amount_info">Loan Amount :</string>
+    <string name="delete_info">DELETE</string>
+    <string name="edit_info">EDIT</string>
 
     <string-array
         name="terms">
