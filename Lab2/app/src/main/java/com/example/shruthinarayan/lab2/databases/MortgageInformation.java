@@ -1,4 +1,4 @@
-package com.example.shruthinarayan.lab2.Databases;
+package com.example.shruthinarayan.lab2.databases;
 
 /**
  * Created by shruthinarayan on 3/27/18.
@@ -24,22 +24,22 @@ public final class MortgageInformation {
 
 
     public static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE IF NOT EXISTS " + com.example.shruthinarayan.lab2.Databases.MortgageInformation.TABLE_NAME + " (" +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation._ID + " INTEGER PRIMARY KEY," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN1_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN2_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN3_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN4_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN5_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN6_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN7_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN8_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN9_NAME_TITLE + " TEXT," +
-                    com.example.shruthinarayan.lab2.Databases.MortgageInformation.COLUMN10_NAME_TITLE + " TEXT)";
+            "CREATE TABLE IF NOT EXISTS " + MortgageInformation.TABLE_NAME + " (" +
+                    com.example.shruthinarayan.lab2.databases.MortgageInformation._ID + " INTEGER PRIMARY KEY," +
+                    MortgageInformation.COLUMN1_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN2_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN3_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN4_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN5_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN6_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN7_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN8_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN9_NAME_TITLE + " TEXT," +
+                    MortgageInformation.COLUMN10_NAME_TITLE + " TEXT)";
 
     public static final String SQL_DELETE_ENTRIES =
-            "DELETE FROM " + com.example.shruthinarayan.lab2.Databases.MortgageInformation.TABLE_NAME + ";\n" +
-                    "DELETE FROM sqlite_sequence where name=" + com.example.shruthinarayan.lab2.Databases.MortgageInformation.TABLE_NAME;
+            "DELETE FROM " + MortgageInformation.TABLE_NAME + ";\n" +
+                    "DELETE FROM sqlite_sequence where name=" + MortgageInformation.TABLE_NAME;
 
 
 

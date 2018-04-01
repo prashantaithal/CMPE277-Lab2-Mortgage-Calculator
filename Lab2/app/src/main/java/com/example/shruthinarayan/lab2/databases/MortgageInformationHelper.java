@@ -1,4 +1,4 @@
-package com.example.shruthinarayan.lab2.Databases;
+package com.example.shruthinarayan.lab2.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,11 +24,11 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(HomeDatabase.SQL_CREATE_ENTRIES);
+        db.execSQL(MortgageInformation.SQL_CREATE_ENTRIES);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL(HomeDatabase.SQL_DELETE_ENTRIES);
+        db.execSQL(MortgageInformation.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -37,7 +37,7 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
 
     public void truncateTable(SQLiteDatabase db)
     {
-        db.execSQL(HomeDatabase.SQL_DELETE_ENTRIES);
+        db.execSQL(MortgageInformation.SQL_DELETE_ENTRIES);
     }
 
     public void insertHome(Data data) throws Exception {
@@ -46,23 +46,23 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
         this.onCreate(db);
 
         ContentValues values = new ContentValues();
-        values.put(HomeDatabase.COLUMN1_NAME_TITLE, data.getType());
-        values.put(HomeDatabase.COLUMN2_NAME_TITLE, data.getAddress());
-        values.put(HomeDatabase.COLUMN3_NAME_TITLE, data.getCity());
-        values.put(HomeDatabase.COLUMN4_NAME_TITLE, data.getState());
-        values.put(HomeDatabase.COLUMN5_NAME_TITLE, data.getZip());
-        values.put(HomeDatabase.COLUMN6_NAME_TITLE, data.getPropertyprice());
-        values.put(HomeDatabase.COLUMN7_NAME_TITLE, data.getDownpayment());
-        values.put(HomeDatabase.COLUMN8_NAME_TITLE, data.getRate());
-        values.put(HomeDatabase.COLUMN9_NAME_TITLE, data.getTerms());
-        values.put(HomeDatabase.COLUMN10_NAME_TITLE, data.getMonthlyPayments());
+        values.put(MortgageInformation.COLUMN1_NAME_TITLE, data.getType());
+        values.put(MortgageInformation.COLUMN2_NAME_TITLE, data.getAddress());
+        values.put(MortgageInformation.COLUMN3_NAME_TITLE, data.getCity());
+        values.put(MortgageInformation.COLUMN4_NAME_TITLE, data.getState());
+        values.put(MortgageInformation.COLUMN5_NAME_TITLE, data.getZip());
+        values.put(MortgageInformation.COLUMN6_NAME_TITLE, data.getPropertyprice());
+        values.put(MortgageInformation.COLUMN7_NAME_TITLE, data.getDownpayment());
+        values.put(MortgageInformation.COLUMN8_NAME_TITLE, data.getRate());
+        values.put(MortgageInformation.COLUMN9_NAME_TITLE, data.getTerms());
+        values.put(MortgageInformation.COLUMN10_NAME_TITLE, data.getMonthlyPayments());
 
-        long newRowId = db.insert(HomeDatabase.TABLE_NAME, null, values);
+        long newRowId = db.insert(MortgageInformation.TABLE_NAME, null, values);
 
         db.close();
     }
 
-    public ArrayList<Data> retrieveHomes(){
+    public ArrayList<Data> obtainMortgageDatabase(){
 
         ArrayList<Data> homelist = new ArrayList<Data>();
         String temp[] = new String[10];
@@ -70,7 +70,7 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
         this.onCreate(db);
 
         try {
-            Cursor c = db.rawQuery("SELECT * FROM " + HomeDatabase.TABLE_NAME, null);
+            Cursor c = db.rawQuery("SELECT * FROM " + MortgageInformation.TABLE_NAME, null);
 
             if (c.moveToFirst()) {
                 do {
@@ -107,7 +107,7 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             this.onCreate(db);
             String[] whereArgs = new String[] { String.valueOf(address) };
-            db.delete(HomeDatabase.TABLE_NAME, HomeDatabase.COLUMN2_NAME_TITLE +"=?", whereArgs);
+            db.delete(MortgageInformation.TABLE_NAME, MortgageInformation.COLUMN2_NAME_TITLE +"=?", whereArgs);
             db.close();
         }catch (Exception e){
             Log.e("Unable to delete","solve the issue");
@@ -119,17 +119,17 @@ public class MortgageInformationHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             this.onCreate(db);
             ContentValues values = new ContentValues();
-            values.put(HomeDatabase.COLUMN1_NAME_TITLE, val[0]);
-            values.put(HomeDatabase.COLUMN3_NAME_TITLE,val[2]);
-            values.put(HomeDatabase.COLUMN4_NAME_TITLE,val[3]);
-            values.put(HomeDatabase.COLUMN5_NAME_TITLE,val[4]);
-            values.put(HomeDatabase.COLUMN6_NAME_TITLE,val[5]);
-            values.put(HomeDatabase.COLUMN7_NAME_TITLE, val[6]);
-            values.put(HomeDatabase.COLUMN8_NAME_TITLE, val[7]);
-            values.put(HomeDatabase.COLUMN9_NAME_TITLE,val[8] );
-            values.put(HomeDatabase.COLUMN10_NAME_TITLE,val[9]);
+            values.put(MortgageInformation.COLUMN1_NAME_TITLE, val[0]);
+            values.put(MortgageInformation.COLUMN3_NAME_TITLE,val[2]);
+            values.put(MortgageInformation.COLUMN4_NAME_TITLE,val[3]);
+            values.put(MortgageInformation.COLUMN5_NAME_TITLE,val[4]);
+            values.put(MortgageInformation.COLUMN6_NAME_TITLE,val[5]);
+            values.put(MortgageInformation.COLUMN7_NAME_TITLE, val[6]);
+            values.put(MortgageInformation.COLUMN8_NAME_TITLE, val[7]);
+            values.put(MortgageInformation.COLUMN9_NAME_TITLE,val[8] );
+            values.put(MortgageInformation.COLUMN10_NAME_TITLE,val[9]);
             String[] whereArgs = new String[] { String.valueOf(address) };
-            db.update(HomeDatabase.TABLE_NAME, values, HomeDatabase.COLUMN2_NAME_TITLE +"=?", whereArgs);
+            db.update(MortgageInformation.TABLE_NAME, values, MortgageInformation.COLUMN2_NAME_TITLE +"=?", whereArgs);
             db.close();
         }catch (Exception e){
             Log.e("Unable to delete","solve the issue");

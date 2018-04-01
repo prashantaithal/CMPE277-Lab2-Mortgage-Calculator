@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/calculate_mortgage"
+            android:id="@+id/calc_mortgage"
             android:icon="@drawable/ic_dollar"
             android:title="@string/mortgage_str" />
         <item
-            android:id="@+id/showhomes_inmap"
+            android:id="@+id/show_in_map"
             android:icon="@drawable/ic_map"
             android:title="@string/map_str" />
     </group>

@@ -15,7 +15,7 @@
     <string name="property_price">Property Price</string>
     <string name="street_address">Street Address :</string>
     <string name="property_type">Property Type :</string>
-    <string name="save_this_property">Save this property?</string>
+    <string name="save_this_property">Save this property</string>
     <string name="dollar">$</string>
     <string name="down_payment">Down Payment</string>
     <string name="monthly_payment">Monthly Payment</string>

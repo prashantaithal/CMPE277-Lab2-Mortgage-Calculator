@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.shruthinarayan.lab2.Data;
 import com.example.shruthinarayan.lab2.R;
+import com.example.shruthinarayan.lab2.databases.MortgageInformationHelper;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -35,28 +38,32 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private EditText mDownPayment;
-    private EditText mPropertyAmount;
-    private EditText mRate;
-    private Spinner mTerms;
-    private TextView mAnswer;
-    private ConstraintLayout mSaveForm;
-    private Spinner mType;
-    private EditText mAddress;
-    private EditText mCity;
-    private EditText mZip;
-    private Spinner mState;
+
+    private EditText addressText;
+    private ScrollView scrollViewer;
+    private Spinner termsSpinner;
+    private TextView answerText;
+    private ConstraintLayout saveMainCL;
+    private EditText cityText;
+    private EditText zipCode;
+    private Spinner stateSpinner;
     private Data data;
-    private ScrollView mScrollView;
+    private Spinner propertyType;
+    private EditText downPayment;
+    private EditText propertyAmount;
+    private EditText rateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        Button mCalculate;
-        Button mSave;
-        TextView mSaveHome;
+        Button calculateButton;
+        Button saveButton;
+        TextView homeText = findViewById(R.id.textview_savehome);
+        saveMainCL = findViewById(R.id.linearlayout_saveform);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,145 +74,81 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        rateText = findViewById(R.id.editText_rate);
+        termsSpinner = findViewById(R.id.spinner_terms);
+        answerText = findViewById(R.id.textview_answer);
+        calculateButton = findViewById(R.id.button_calculate);
+        saveButton = findViewById(R.id.button_save);
+        scrollViewer = findViewById(R.id.scrollview);
+        propertyType = findViewById(R.id.spinner_propertytype);
+        addressText = findViewById(R.id.editText_address);
+        cityText = findViewById(R.id.editText_city);
+        downPayment = findViewById(R.id.editText_downpayment);
+        stateSpinner = findViewById(R.id.spinner_states);
+        zipCode = findViewById(R.id.editText_zipcode);
+        propertyAmount = findViewById(R.id.editText_propertyprice);
 
-        mScrollView = findViewById(R.id.scrollview);
-        mType = findViewById(R.id.spinner_propertytype);
-        mAddress = findViewById(R.id.editText_address);
-        mCity = findViewById(R.id.editText_city);
-        mState = findViewById(R.id.spinner_states);
-        mZip = findViewById(R.id.editText_zipcode);
-        mPropertyAmount = findViewById(R.id.editText_propertyprice);
-        mDownPayment = findViewById(R.id.editText_downpayment);
-        mRate = findViewById(R.id.editText_rate);
-        mTerms = findViewById(R.id.spinner_terms);
-        mAnswer = findViewById(R.id.textview_answer);
-        mCalculate = findViewById(R.id.button_calculate);
-        mSave = findViewById(R.id.button_save);
-
-        if (getIntent().getStringExtra("home") != null) {
-            String jsonString = getIntent().getStringExtra("home");
-            Gson gson = new Gson();
-            Data home = gson.fromJson(jsonString, Data.class);
-
-            int position = 0;
-            String[] temp_type = getResources().getStringArray(R.array.propertytype);
-            for (int i = 0; i < temp_type.length; i++)
-                if (temp_type[i].equals(home.getState()))
-                    position = i;
-
-            mType.setSelection(position);
-            mAddress.setText(home.getAddress());
-            mCity.setText(home.getCity());
-
-            position = 0;
-            String[] temp_states = getResources().getStringArray(R.array.states);
-            for (int i = 0; i < temp_states.length; i++)
-                if (temp_states[i].equals(home.getState()))
-                    position = i;
-
-            mState.setSelection(position);
-            mZip.setText(home.getZip());
-            mPropertyAmount.setText(home.getPropertyprice());
-            mDownPayment.setText(home.getDownpayment());
-            mRate.setText(home.getRate());
-
-            position = 0;
-            String[] temp_terms = getResources().getStringArray(R.array.terms);
-            for (int i = 0; i < temp_terms.length; i++)
-                if (temp_terms[i].equals(home.getTerms()))
-                    position = i;
-
-            mTerms.setSelection(position);
-            mAnswer.setText(home.getMonthlyPayments());
-
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
+        editInfo();
 
         data = new Data();
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String propertyprice = mPropertyAmount.getText().toString();
-                String d = mDownPayment.getText().toString();
-                String r = mRate.getText().toString();
-                String t = mTerms.getSelectedItem().toString();
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                float property_price;
-                float downPayment;
-                float rate;
-                int terms;
+                inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                if (propertyprice.isEmpty() || propertyprice.equalsIgnoreCase("")) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Property Price can't be empty";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else if (r.isEmpty() || r.equalsIgnoreCase("")) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Rate cannot be empty";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else {
-                    property_price = Float.parseFloat(propertyprice);
+                String propertyprice = propertyAmount.getText().toString();
+                String downStr = downPayment.getText().toString();
+                String rateStr = rateText.getText().toString();
+                String termsStr = termsSpinner.getSelectedItem().toString();
 
-                    if (d.isEmpty() || d.equalsIgnoreCase("")) {
-                        downPayment = 0;
-                        mDownPayment.setText(downPayment + "");
-                    } else
-                        downPayment = Float.parseFloat(mDownPayment.getText().toString());
-
-                    rate = Float.parseFloat(r);
-
-                    terms = Integer.parseInt(t);
-                    float principal = property_price - downPayment;
-                    rate = rate / 1200;
-                    terms = terms * 12;
-                    int installment = (int) (((rate * principal) / (1 - Math.pow(1 + rate, terms * -1))));
-                    mAnswer.setText(installment + "");
-                }
+                checkTextFields(propertyprice, downStr, rateStr, termsStr);
             }
         };
 
-        mSaveForm = findViewById(R.id.linearlayout_saveform);
-        mSaveHome = findViewById(R.id.textview_savehome);
-        mCalculate.setOnClickListener(listener);
 
-        View.OnClickListener listener1 = new View.OnClickListener() {
+        calculateButton.setOnClickListener(listener);
+
+        View.OnClickListener saveButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSaveForm.setVisibility(View.VISIBLE);
-                mScrollView.scrollBy(0, 1000);
+                saveMainCL.setVisibility(View.VISIBLE);
+                scrollViewer.scrollBy(0, 1000);
             }
         };
-        mSaveHome.setOnClickListener(listener1);
+        homeText.setOnClickListener(saveButtonListener);
 
         View.OnClickListener listener2 = new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
                 String[] fields = new String[10];
-                fields[0] = mType.getSelectedItem().toString();
-                fields[1] = mAddress.getText().toString();
-                fields[2] = mCity.getText().toString();
-                fields[3] = mState.getSelectedItem().toString();
-                fields[4] = mZip.getText().toString();
-                fields[5] = mPropertyAmount.getText().toString();
-                fields[6] = mDownPayment.getText().toString();
-                fields[7] = mRate.getText().toString();
-                fields[8] = mTerms.getSelectedItem().toString();
-                fields[9] = mAnswer.getText().toString();
+                fields[0] = propertyType.getSelectedItem().toString();
+                fields[1] = addressText.getText().toString();
+                fields[2] = cityText.getText().toString();
+                fields[3] = stateSpinner.getSelectedItem().toString();
+                fields[4] = zipCode.getText().toString();
+                fields[5] = propertyAmount.getText().toString();
+                fields[6] = downPayment.getText().toString();
+                fields[7] = rateText.getText().toString();
+                fields[8] = termsSpinner.getSelectedItem().toString();
+                fields[9] = answerText.getText().toString();
 
-                if (fields[1].isEmpty() || fields[1].equals("") || fields[2].isEmpty() || fields[2].equals("") || fields[4].isEmpty() || fields[4].equals( "")) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Address fields cannot be empty";
+                if (TextUtils.isEmpty(fields[1]) || TextUtils.isEmpty(fields[2]) || TextUtils.isEmpty(fields[4])) {
+                    CharSequence info = "Address fields should not be empty";
                     int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    Toast toaster = Toast.makeText(getApplicationContext(), info, duration);
+                    toaster.show();
                 } else {
                     data.setFields(fields);
 
@@ -227,38 +170,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 int duration = Toast.LENGTH_SHORT;
                                 Toast toast = Toast.makeText(context, text, duration);
                                 toast.show();
-                            }
-                            else {
+                            } else {
                                 location = temp.get(0);
-                                com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
+                                MortgageInformationHelper mDbHelper = new MortgageInformationHelper(getApplicationContext());
 
                                 try {
                                     if (getIntent().getStringExtra("home") != null) {
-
-                                        fields[0] = mType.getSelectedItem().toString();
-                                        fields[1] = mAddress.getText().toString();
-                                        fields[2] = mCity.getText().toString();
-                                        fields[3] = mState.getSelectedItem().toString();
-                                        fields[4] = mZip.getText().toString();
-                                        fields[5] = mPropertyAmount.getText().toString();
-                                        fields[6] = mDownPayment.getText().toString();
-                                        fields[7] = mRate.getText().toString();
-                                        fields[8] = mTerms.getSelectedItem().toString();
-                                        fields[9] = mAnswer.getText().toString();
-
-                                        mDbHelper.updateHome(fields, fields[1]);
-                                        Context context = getApplicationContext();
-                                        CharSequence text = "Address Updated Successfully.";
-                                        int duration = Toast.LENGTH_SHORT;
-                                        Toast toast = Toast.makeText(context, text, duration);
-                                        toast.show();
+                                        updateAddress(fields, mDbHelper);
                                     } else {
-                                        mDbHelper.insertHome(data);
-                                        Context context = getApplicationContext();
-                                        CharSequence text = "Address Successfully Saved.";
-                                        int duration = Toast.LENGTH_SHORT;
-                                        Toast toast = Toast.makeText(context, text, duration);
-                                        toast.show();
+                                        saveAddress(mDbHelper);
                                     }
                                 } catch (Exception e) {
                                     Log.e("Exception ", "e");
@@ -267,32 +187,127 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         } catch (IOException ioe) {
                             Context context = getApplicationContext();
-                            CharSequence text = "Couldn't verify address.! Please correct Error";
-                            int duration = Toast.LENGTH_SHORT;
+                            CharSequence text = "Invalid Address! Please correct it";
+                            int duration = Toast.LENGTH_LONG;
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
                         }
                     } else {
                         Context context = getApplicationContext();
                         CharSequence text = "Couldn't verify Address.! Please connect to Internet";
-                        int duration = Toast.LENGTH_SHORT;
+                        int duration = Toast.LENGTH_LONG;
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
                     }
-
                 }
             }
         };
-        mSave.setOnClickListener(listener2);
+        saveButton.setOnClickListener(listener2);
 
-        View.OnClickListener listener3 = new View.OnClickListener() {
+        View.OnClickListener homeDetailsListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSaveForm.setVisibility(View.VISIBLE);
-                mScrollView.scrollBy(0, 1000);
+                saveMainCL.setVisibility(View.VISIBLE);
+                scrollViewer.scrollBy(0, 500);
             }
         };
-        mSaveHome.setOnClickListener(listener3);
+        homeText.setOnClickListener(homeDetailsListener);
+    }
+
+    private void saveAddress(MortgageInformationHelper mDbHelper) throws Exception {
+        mDbHelper.insertHome(data);
+        Context context = getApplicationContext();
+        CharSequence text = "Address Successfully Saved.";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    private void updateAddress(String[] fields, MortgageInformationHelper mDbHelper) {
+        fields[0] = propertyType.getSelectedItem().toString();
+        fields[1] = addressText.getText().toString();
+        fields[2] = cityText.getText().toString();
+        fields[3] = stateSpinner.getSelectedItem().toString();
+        fields[4] = zipCode.getText().toString();
+        fields[5] = propertyAmount.getText().toString();
+        fields[6] = downPayment.getText().toString();
+        fields[7] = rateText.getText().toString();
+        fields[8] = termsSpinner.getSelectedItem().toString();
+        fields[9] = answerText.getText().toString();
+
+        mDbHelper.updateHome(fields, fields[1]);
+        Context context = getApplicationContext();
+        CharSequence text = "Address Updated Successfully.";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    private void checkTextFields(String propertyPrice, String downStr, String rateStr, String termsStr) {
+        float downPayment = 0;
+        float ratePercent = Float.parseFloat(rateStr);
+        ;
+        float propertyPriceFloat = Float.parseFloat(propertyPrice);
+        int terms = Integer.parseInt(termsStr);
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_LONG;
+
+        if (TextUtils.isEmpty(propertyPrice)) {
+            CharSequence text = "Property Price should not be empty";
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+        if (TextUtils.isEmpty(rateStr)) {
+            CharSequence text = "Rate cannot be empty";
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } else {
+            if (TextUtils.isEmpty(downStr)) {
+                this.downPayment.setText(downPayment + "");
+            } else
+                downPayment = Float.parseFloat(this.downPayment.getText().toString());
+
+            float principal = propertyPriceFloat - downPayment;
+            ratePercent = ratePercent / 1200;
+            terms = terms * 12;
+            int installment = (int) (((ratePercent * principal) / (1 - Math.pow(1 + ratePercent, terms * -1))));
+            answerText.setText(installment + "");
+        }
+    }
+
+    private void editInfo() {
+        if (getIntent().getStringExtra("edit") != null) {
+            int position = 0;
+            Gson gson = new Gson();
+            String jsonString = getIntent().getStringExtra("edit");
+            String[] temp_type = getResources().getStringArray(R.array.propertytype);
+            Data home = gson.fromJson(jsonString, Data.class);
+
+            for (int i = 0; i < temp_type.length; i++)
+                if (temp_type[i].equals(home.getState()))
+                    position = i;
+
+            addressText.setText(home.getAddress());
+            propertyType.setSelection(position);
+            cityText.setText(home.getCity());
+
+            position = 0;
+            String[] temp_states = getResources().getStringArray(R.array.states);
+            for (int i = 0; i < temp_states.length; i++)
+                if (temp_states[i].equals(home.getState()))
+                    position = i;
+            stateSpinner.setSelection(position);
+            zipCode.setText(home.getZip());
+
+            position = 0;
+            String[] temp_terms = getResources().getStringArray(R.array.terms);
+            for (int i = 0; i < temp_terms.length; i++)
+                if (temp_terms[i].equals(home.getTerms()))
+                    position = i;
+
+            answerText.setText(home.getMonthlyPayments());
+            termsSpinner.setSelection(position);
+        }
     }
 
     @Override
@@ -309,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuItem reset_action;
         getMenuInflater().inflate(R.menu.main, menu);
-        reset_action = menu.findItem(R.id.action_reset);
+        reset_action = menu.findItem(R.id.reset);
         reset_action.setTitle("Start New Calculation");
         return true;
     }
@@ -317,44 +332,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_reset) {
-
-            mType.setSelection(0);
-            mAddress.setText("");
-            mCity.setText("");
-            mState.setSelection(0);
-            mZip.setText("");
-            mPropertyAmount.setText("");
-            mDownPayment.setText("");
-            mRate.setText("");
-            mTerms.setSelection(0);
-            mAnswer.setText("");
-            mSaveForm.setVisibility(View.INVISIBLE);
-
+        if (id == R.id.reset) {
+            propertyType.setSelection(0);
+            addressText.setText("");
+            propertyAmount.setText("");
+            downPayment.setText("");
+            rateText.setText("");
+            cityText.setText("");
+            stateSpinner.setSelection(0);
+            zipCode.setText("");
+            termsSpinner.setSelection(0);
+            answerText.setText("");
+            saveMainCL.setVisibility(View.INVISIBLE);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    //@SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.calculate_mortgage) {
-            mType.setSelection(0);
-            mAddress.setText("");
-            mCity.setText("");
-            mState.setSelection(0);
-            mZip.setText("");
-            mPropertyAmount.setText("");
-            mDownPayment.setText("");
-            mRate.setText("");
-            mTerms.setSelection(0);
-            mAnswer.setText("");
-            mSaveForm.setVisibility(View.INVISIBLE);
-        } else if (id == R.id.showhomes_inmap) {
+        if (id == R.id.calc_mortgage) {
+            rateText.setText("");
+            addressText.setText("");
+            cityText.setText("");
+            stateSpinner.setSelection(0);
+            termsSpinner.setSelection(0);
+            answerText.setText("");
+            propertyType.setSelection(0);
+            zipCode.setText("");
+            propertyAmount.setText("");
+            downPayment.setText("");
+            saveMainCL.setVisibility(View.INVISIBLE);
+        } else if (id == R.id.show_in_map) {
             startActivity(new Intent(MainActivity.this, MapActivity.class));
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -362,4 +373,3 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 }
-
