@@ -247,10 +247,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void checkTextFields(String propertyPrice, String downStr, String rateStr, String termsStr) {
         float downPayment = 0;
-        float ratePercent = Float.parseFloat(rateStr);
-        ;
-        float propertyPriceFloat = Float.parseFloat(propertyPrice);
-        int terms = Integer.parseInt(termsStr);
+        float ratePercent = 0;
+        float propertyPriceFloat =  0;
+        int terms = 0;
+        try {
+            ratePercent = Float.parseFloat(rateStr);
+        }
+        catch(NumberFormatException ex) {
+            ratePercent = 0; // default ??
+        }
+
+        try {
+            propertyPriceFloat = Float.parseFloat(propertyPrice);
+        }
+        catch(NumberFormatException ex) {
+            propertyPriceFloat = 0; // default ??
+        }
+
+        try {
+            terms = Integer.parseInt(termsStr);
+        }
+        catch(NumberFormatException ex) {
+            terms = 0; // default ??
+        }
+
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
 
@@ -259,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
-        if (TextUtils.isEmpty(rateStr)) {
+        else if (TextUtils.isEmpty(rateStr)) {
             CharSequence text = "Rate cannot be empty";
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
