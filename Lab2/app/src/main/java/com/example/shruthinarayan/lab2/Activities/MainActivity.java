@@ -121,16 +121,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calculateButton.setOnClickListener(listener);
 
-        View.OnClickListener saveButtonListener = new View.OnClickListener() {
+        View.OnClickListener saveButtonListener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveMainCL.setVisibility(View.VISIBLE);
                 scrollViewer.scrollBy(0, 1000);
             }
         };
-        homeText.setOnClickListener(saveButtonListener);
+        homeText.setOnClickListener(saveButtonListener1);
 
-        View.OnClickListener listener2 = new View.OnClickListener() {
+        View.OnClickListener saveBtnListenerFinal = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -177,11 +177,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 MortgageInformationHelper mDbHelper = new MortgageInformationHelper(getApplicationContext());
 
                                 try {
-                                    if (getIntent().getStringExtra("home") != null) {
+                                    if (getIntent().getStringExtra("edit") != null) {
                                         updateAddress(fields, mDbHelper);
                                     } else {
                                         saveAddress(mDbHelper);
                                     }
+                                    scrollViewer.pageScroll(View.FOCUS_UP);
+                                    propertyType.setSelection(0);
+                                    addressText.setText("");
+                                    propertyAmount.setText("");
+                                    downPayment.setText("");
+                                    rateText.setText("");
+                                    cityText.setText("");
+                                    stateSpinner.setSelection(0);
+                                    zipCode.setText("");
+                                    termsSpinner.setSelection(0);
+                                    answerText.setText("");
+                                    saveMainCL.setVisibility(View.INVISIBLE);
+
                                 } catch (Exception e) {
                                     Log.e("Exception ", "e");
                                     System.out.println("Exception " + e);
@@ -204,13 +217,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         };
-        saveButton.setOnClickListener(listener2);
+        saveButton.setOnClickListener(saveBtnListenerFinal);
 
         View.OnClickListener homeDetailsListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveMainCL.setVisibility(View.VISIBLE);
-                scrollViewer.scrollBy(0, 500);
+                scrollViewer.scrollBy(0, 1000);
             }
         };
         homeText.setOnClickListener(homeDetailsListener);
@@ -362,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.reset) {
+            scrollViewer.pageScroll(View.FOCUS_UP);
             propertyType.setSelection(0);
             addressText.setText("");
             propertyAmount.setText("");
@@ -383,6 +397,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.calc_mortgage) {
+            scrollViewer.pageScroll(View.FOCUS_UP);
             rateText.setText("");
             addressText.setText("");
             cityText.setText("");
