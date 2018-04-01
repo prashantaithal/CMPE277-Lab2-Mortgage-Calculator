@@ -9,7 +9,7 @@ public final class MortgageInformation {
     private MortgageInformation() {}
 
     /* Inner class that defines the table contents */
-    public static final String _ID = "NO";
+    private static final String _ID = "NO";
     public static final String TABLE_NAME = "HOMEDETAILS";
     public static final String COLUMN1_NAME_TITLE = "TYPE";
     public static final String COLUMN2_NAME_TITLE = "ADDRESS";

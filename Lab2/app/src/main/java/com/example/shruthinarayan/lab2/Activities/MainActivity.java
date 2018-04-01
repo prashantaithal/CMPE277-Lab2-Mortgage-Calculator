@@ -299,6 +299,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             stateSpinner.setSelection(position);
             zipCode.setText(home.getZip());
 
+            rateText.setText(home.getRate());
+            propertyAmount.setText(home.getPropertyprice());
+            downPayment.setText(home.getDownpayment());
+            answerText.setText(home.getMonthlyPayments());
+
             position = 0;
             String[] temp_terms = getResources().getStringArray(R.array.terms);
             for (int i = 0; i < temp_terms.length; i++)
@@ -307,6 +312,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             answerText.setText(home.getMonthlyPayments());
             termsSpinner.setSelection(position);
+
+
         }
     }
 

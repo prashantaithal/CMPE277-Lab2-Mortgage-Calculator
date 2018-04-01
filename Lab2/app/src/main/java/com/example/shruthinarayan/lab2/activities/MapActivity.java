@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -51,10 +52,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private TextView streetAddress;
     private TextView cityText;
     private TextView priceText;
-    private TextView downpaymentText;
     private TextView rateText;
     private TextView termsText;
     private TextView installmentText;
+    private TextView downpaymentText;
+
     private Button deleteBtn;
     private Button edit;
 
@@ -63,7 +65,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         DrawerLayout drawerLyt = findViewById(R.id.drawer_layout);
+        MortgageInformationHelper dbHelper = new MortgageInformationHelper(getApplicationContext());
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,11 +79,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        MortgageInformationHelper dbHelper = new MortgageInformationHelper(getApplicationContext());
-
-
 
         mapFragment.getMapAsync(this);
 
@@ -108,44 +108,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 @Override
                 public View getInfoContents(final Marker marker) {
 
-                    Data home;
-                    final Dialog dialog = new Dialog(MapActivity.this);
-                    dialog.setContentView(R.layout.details);
-                    dialog.setTitle("Home");
+                    final Dialog dialog = getDialogBoxDetails(marker);
 
-                    typeText = dialog.findViewById(R.id.type);
-                    streetAddress = dialog.findViewById(R.id.address);
-                    cityText = dialog.findViewById(R.id.city);
-                    priceText = dialog.findViewById(R.id.price);
-                    downpaymentText = dialog.findViewById(R.id.downpayment);
-                    rateText = dialog.findViewById(R.id.rate);
-                    termsText = dialog.findViewById(R.id.terms);
-                    installmentText = dialog.findViewById(R.id.installment);
-                    edit = dialog.findViewById(R.id.edit);
-                    deleteBtn = dialog.findViewById(R.id.delete);
-
-                    home = popUpInfo.get(marker);
-                    typeText.setText(home.getType());
-                    streetAddress.setText(home.getAddress());
-                    cityText.setText(home.getCity());
-                    priceText.setText(home.getPropertyprice());
-                    downpaymentText.setText(home.getDownpayment());
-                    rateText.setText(home.getRate());
-                    termsText.setText(home.getTerms());
-                    installmentText.setText(home.getMonthlyPayments());
-                    // if button is clicked, close the custom dialog
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //     com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper mDbHelper = new com.example.shruthinarayan.lab2.Databases.MortgageInformationHelper(getApplicationContext());
-                            Data homeToEdit = popUpInfo.get(marker);
                             Gson gson = new Gson();
-                            String j = gson.toJson(homeToEdit);
+                            Data mapToEdit = popUpInfo.get(marker);
+                            String jsonStr = gson.toJson(mapToEdit);
                             Intent intent = new Intent(MapActivity.this, MainActivity.class);
-                            intent.putExtra("edit", j);
+                            intent.putExtra("edit", jsonStr);
                             startActivity(intent);
-
-
                         }
                     });
                     deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +130,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             marker.remove();
                             dialog.dismiss();
                             Context context = getApplicationContext();
-                            CharSequence text = "Home Deleted..!";
-                            int duration = Toast.LENGTH_SHORT;
+                            CharSequence text = "Mortgage Information Deleted!";
+                            int duration = Toast.LENGTH_LONG;
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
 
@@ -173,6 +146,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    @NonNull
+    private Dialog getDialogBoxDetails(Marker marker) {
+        Data home;
+        final Dialog dialog = new Dialog(MapActivity.this);
+        dialog.setContentView(R.layout.details);
+        dialog.setTitle("Home");
+
+        typeText = dialog.findViewById(R.id.type);
+        streetAddress = dialog.findViewById(R.id.address);
+        cityText = dialog.findViewById(R.id.city);
+        priceText = dialog.findViewById(R.id.price);
+        downpaymentText = dialog.findViewById(R.id.downpayment);
+        rateText = dialog.findViewById(R.id.rate);
+        termsText = dialog.findViewById(R.id.terms);
+        installmentText = dialog.findViewById(R.id.installment);
+        edit = dialog.findViewById(R.id.edit);
+        deleteBtn = dialog.findViewById(R.id.delete);
+
+        home = popUpInfo.get(marker);
+        typeText.setText(home.getType());
+        rateText.setText(home.getRate());
+        streetAddress.setText(home.getAddress());
+        cityText.setText(home.getCity());
+        priceText.setText(home.getPropertyprice());
+        downpaymentText.setText(home.getDownpayment());
+        termsText.setText(home.getTerms());
+        installmentText.setText(home.getMonthlyPayments());
+        return dialog;
+    }
+
     private void displayHomes(GoogleMap map, Geocoder geoCoder) {
         List<Address> temp;
         Address location;
@@ -181,11 +184,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         System.out.println("Address of firest : " + homeList.get(0).getFullAddress());
         for (int i = 0; i < homeList.size(); i++) {
             Marker marker;
-            System.out.println("Inside for loop");
             try {
                 Data home = homeList.get(i);
                 String full_address = home.getFullAddress();
-                System.out.println("Address : " + full_address);
                 temp = geoCoder.getFromLocationName(full_address, 1);
                 location = temp.get(0);
                 latLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -196,12 +197,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
 
             } catch (Exception ee) {
-                System.out.println("Got Ex");
                 Context context = getApplicationContext();
-                CharSequence text = "Couldn't locate a Home..! Make Sure you're connected to Internet";
-                int duration = Toast.LENGTH_SHORT;
+                CharSequence text = "Error! Make Sure you're connected to Internet";
+                int duration = Toast.LENGTH_LONG;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                System.out.println("Exception");
             }
         }
     }
@@ -210,6 +211,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         List<Address> temp;
         Address location;
         Geocoder america = new Geocoder(getApplicationContext());
+        Context context = getApplicationContext();
+        CharSequence text = "No Saved Mortgage Information!";
+        int duration = Toast.LENGTH_LONG;
+
         try {
             temp = america.getFromLocationName("United States of America", 1);
             location = temp.get(0);
@@ -217,10 +222,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (IOException e) {
             Log.e("Exception", "0 result found");
         }
-
-        Context context = getApplicationContext();
-        CharSequence text = "No Saved Homes..!!";
-        int duration = Toast.LENGTH_LONG;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
@@ -248,10 +249,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-
-
-        if (id == R.id.reset) {
+        if (item.getItemId() == R.id.reset) {
 
             MortgageInformationHelper mDbHelper = new MortgageInformationHelper(getApplicationContext());
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -264,7 +262,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
             Context context = getApplicationContext();
-            CharSequence text = "All Homes Deleted..!";
+            CharSequence text = "All Info Deleted!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
@@ -276,17 +274,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-
-        // Handle the camera action
-        if (id == R.id.calc_mortgage) {
+        if (item.getItemId() == R.id.calc_mortgage) {
             startActivity(new Intent(MapActivity.this, MainActivity.class));
         }
-//        else if (id == R.id.showhomes_inmap) {
-//
-//        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
