@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Spinner termsSpinner;
     private TextView answerText;
     private ConstraintLayout saveMainCL;
+    private ConstraintLayout addressCL;
     private EditText cityText;
     private EditText zipCode;
     private Spinner stateSpinner;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Button saveButton;
         TextView homeText = findViewById(R.id.textview_savehome);
         saveMainCL = findViewById(R.id.linearlayout_saveform);
+        addressCL = findViewById(R.id.constraintLayout_address);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
