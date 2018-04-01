@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         } catch (IOException ioe) {
                             Context context = getApplicationContext();
-                            CharSequence text = "Invalid Address! Please correct it";
+                            CharSequence text = "Connect to Internet";
                             int duration = Toast.LENGTH_LONG;
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
