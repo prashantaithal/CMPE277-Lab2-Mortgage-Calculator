@@ -10,7 +10,7 @@ public final class MortgageInformation {
 
     /* Inner class that defines the table contents */
     private static final String _ID = "NO";
-    public static final String TABLE_NAME = "HOMEDETAILS";
+    public static final String TABLE_NAME = "HOMEINFO";
     public static final String COLUMN1_NAME_TITLE = "TYPE";
     public static final String COLUMN2_NAME_TITLE = "ADDRESS";
     public static final String COLUMN3_NAME_TITLE = "CITY";
@@ -20,7 +20,7 @@ public final class MortgageInformation {
     public static final String COLUMN7_NAME_TITLE = "DOWNPAYMENT";
     public static final String COLUMN8_NAME_TITLE = "RATE";
     public static final String COLUMN9_NAME_TITLE = "TERM";
-    public static final String COLUMN10_NAME_TITLE = "EMI";
+    public static final String COLUMN10_NAME_TITLE = "MONTHLY";
 
 
     public static final String SQL_CREATE_ENTRIES =
@@ -40,7 +40,4 @@ public final class MortgageInformation {
     public static final String SQL_DELETE_ENTRIES =
             "DELETE FROM " + MortgageInformation.TABLE_NAME + ";\n" +
                     "DELETE FROM sqlite_sequence where name=" + MortgageInformation.TABLE_NAME;
-
-
-
 }

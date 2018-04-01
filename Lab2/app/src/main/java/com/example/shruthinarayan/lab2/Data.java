@@ -41,11 +41,11 @@ public class Data {
     public String getTerms() {
         return terms;
     }
-    public String getMonthlyPayments() {
+    public String getEMI() {
         return mortgage;
     }
 
-    public void setFields(String[] fields){
+    public void setData(String[] fields){
         property_type = fields[0];
         street_address = fields[1];
         city = fields[2];
@@ -57,7 +57,9 @@ public class Data {
         terms = fields[8];
         mortgage = fields[9];
     }
+
     public String getFullAddress(){
         return street_address + "," + city + "," + state + "," + zipcode;
     }
+
 }

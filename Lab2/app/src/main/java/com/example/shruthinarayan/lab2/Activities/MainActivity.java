@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast toaster = Toast.makeText(getApplicationContext(), info, duration);
                     toaster.show();
                 } else {
-                    data.setFields(fields);
+                    data.setData(fields);
 
                     String full_address = data.getFullAddress();
 
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             rateText.setText(home.getRate());
             propertyAmount.setText(home.getPropertyprice());
             downPayment.setText(home.getDownpayment());
-            answerText.setText(home.getMonthlyPayments());
+            answerText.setText(home.getEMI());
 
             position = 0;
             String[] temp_terms = getResources().getStringArray(R.array.terms);
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (temp_terms[i].equals(home.getTerms()))
                     position = i;
 
-            answerText.setText(home.getMonthlyPayments());
+            answerText.setText(home.getEMI());
             termsSpinner.setSelection(position);
 
 

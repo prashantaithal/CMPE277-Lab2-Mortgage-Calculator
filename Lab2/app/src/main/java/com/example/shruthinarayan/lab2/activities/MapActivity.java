@@ -172,7 +172,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         priceText.setText(home.getPropertyprice());
         downpaymentText.setText(home.getDownpayment());
         termsText.setText(home.getTerms());
-        installmentText.setText(home.getMonthlyPayments());
+        installmentText.setText(home.getEMI());
         return dialog;
     }
 
