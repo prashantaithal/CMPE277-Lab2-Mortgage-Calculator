@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDbHelper.updateHome(fields, fields[1]);
         Context context = getApplicationContext();
-        CharSequence text = "Address Updated Successfully.";
+        CharSequence text = "Details Updated Successfully.";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
